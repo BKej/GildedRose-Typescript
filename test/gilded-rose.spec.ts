@@ -12,7 +12,7 @@ describe('Gilded Rose', function () {
     });
 
     it('should decrease quality by 1 if sellIn >= 0 and quality > 0 for Normal Items', function () {
-        const gildedRose = new GildedRose([new Item('foo', 3, 23), new Item('Potato', 1, 0)]);
+        const gildedRose = new GildedRose([new Item('foo', 3, 23), new Item('Potato', 1, 1)]);
         const items = gildedRose.updateQuality();
         expect(items[0].quality).to.equal(22);
         expect(items[1].quality).to.equal(0);
@@ -24,7 +24,7 @@ describe('Gilded Rose', function () {
         expect(items[0].quality).to.equal(0);
     });
 
-  
+
     //testing functions for special cases
     //1.special case Aged Brie:
     it('should decrease sellIn by 1 for Aged Brie', function () {
@@ -55,7 +55,7 @@ describe('Gilded Rose', function () {
     });
 
     //2.testing functions for BackStage passes:
-    
+
     it('should decrease sellIn by 1 for Backstage passes', function () {
         const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 5, 20), new Item('Backstage passes to a TAFKAL80ETC concert', 0, 10)]);
         const items = gildedRose.updateQuality();
@@ -63,9 +63,10 @@ describe('Gilded Rose', function () {
         expect(items[1].sellIn).to.equal(-1);
     });
 
-    it('should increase quality by 1 if quality is less than 50 for Backstage passes', function () {
-        const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 10, 49)]);
+    it('should increase quality by 1 if quality < 50 but sellIn > 10 for Backstage passes', function () {
+        const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 12, 49)]);
         const items = gildedRose.updateQuality();
+        expect(items[0].sellIn).to.equal(11);
         expect(items[0].quality).to.equal(50);
     });
 
@@ -96,7 +97,7 @@ describe('Gilded Rose', function () {
 
     //testing functions for Sulfuras
     it('should be same sellIn and quality for Sulfuras', function () {
-        const gildedRose = new GildedRose([new Item('Sulfuras, Hand of Ragnaros', -1, 20),new Item('Sulfuras, Hand of Ragnaros', 15, 80),new Item('Sulfuras, Hand of Ragnaros', 3, 32)]);
+        const gildedRose = new GildedRose([new Item('Sulfuras, Hand of Ragnaros', -1, 20), new Item('Sulfuras, Hand of Ragnaros', 15, 80), new Item('Sulfuras, Hand of Ragnaros', 3, 32)]);
         const items = gildedRose.updateQuality();
         expect(items[0].sellIn).to.equal(-1);
         expect(items[0].quality).to.equal(20)
@@ -105,5 +106,5 @@ describe('Gilded Rose', function () {
         expect(items[2].sellIn).to.equal(3)
         expect(items[2].quality).to.equal(32);
     });
-    
+
 });

@@ -1,91 +1,89 @@
 export class Item {
-    name: string;
-    sellIn: number;
-    quality: number;
+    name: string
+    sellIn: number
+    quality: number
 
     constructor(name, sellIn, quality) {
-        this.name = name;
-        this.sellIn = sellIn;
-        this.quality = quality;
+        this.name = name
+        this.sellIn = sellIn
+        this.quality = quality
+    }
+
+
+    // Next step: improve codes within each functions for different types;
+    //functions for differet items types
+    updateQualityNormalItems() {
+        this.sellIn--
+        if (this.sellIn < 0) {
+            //using math.max to set to either 0 or this.quality -2, whichever is greater
+            this.quality = Math.max(0, this.quality - 2)
+        }
+        else { this.quality = Math.max(0, this.quality - 1) }
+    }
+
+    updateQualityAgedBrie() {
+        this.sellIn--
+        if (this.quality < 50) this.quality++
+        if (this.sellIn < 0) this.quality++
+    }
+
+    updateQualityBackstage() {
+        this.sellIn--
+        if (this.quality < 50) {
+            if (this.sellIn > 10) {
+                this.quality += 1
+            } else if (this.sellIn > 5 && this.sellIn <= 10) {
+                this.quality += 2
+            } else if (this.sellIn > 0 && this.sellIn <= 5) {
+                this.quality += 3
+            } else {
+                this.quality = 0
+            }
+        }
+    }
+
+    conjuredManaCakeCheck() {
+        this.sellIn--
+        if (this.sellIn < 0) {
+            //using math.max to set to either 0 or this.quality -2, whichever is greater
+            this.quality = Math.max(0, this.quality - 4)
+        }
+        else { this.quality = Math.max(0, this.quality - 2) }
     }
 }
 
-// Next step: improve codes within each functions for different types;
-
 export class GildedRose {
-    items: Array<Item>;
+    items: Array<Item>
 
     constructor(items = [] as Array<Item>) {
-        this.items = items;
-    }
-
-    //functions to check quality
-    checkQualityBelowFifty(i) {
-        if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1
-        }
-    }
-
-    //functions for differet items types
-    updateQualityNormalItems(i) {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
-        if (this.items[i].sellIn >= 0 && this.items[i].quality > 0) {
-            this.items[i].quality = this.items[i].quality - 1
-        }
-        if (this.items[i].sellIn < 0 && this.items[i].quality > 1) {
-            this.items[i].quality = this.items[i].quality - 2
-        }
-    }
-
-    updateQualityAgedBrie(i) {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
-        this.checkQualityBelowFifty(i)
-        if (this.items[i].sellIn < 0) {
-            this.checkQualityBelowFifty(i)
-        }
-    }
-
-    updateQualityBackstage(i) {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
-        this.checkQualityBelowFifty(i)
-        if (this.items[i].sellIn < 11) {
-            this.checkQualityBelowFifty(i)
-        }
-        if (this.items[i].sellIn < 6) {
-            this.checkQualityBelowFifty(i)
-        }
-        if (this.items[i].sellIn < 0) {
-            this.items[i].quality = this.items[i].quality - this.items[i].quality
-        }
-    }
-
-    updateQualitySulfuras(i) {
-        this.items[i].quality = this.items[i].quality
-        this.items[i].sellIn = this.items[i].sellIn
+        this.items = items
     }
 
     //the main function
     updateQuality() {
-        for (let i = 0; i < this.items.length; i++) {
-            if (this.items[i].name === 'Aged Brie') {
-                this.updateQualityAgedBrie(i)
-            }
+        for (const item of this.items) {
 
-            if (this.items[i].name === 'Backstage passes to a TAFKAL80ETC concert') {
-                this.updateQualityBackstage(i)
-            }
-
-            if (this.items[i].name === 'Sulfuras, Hand of Ragnaros') {
-                this.updateQualitySulfuras(i)
-            }
-
-            if (this.items[i].name !== 'Sulfuras, Hand of Ragnaros' && this.items[i].name !== 'Backstage passes to a TAFKAL80ETC concert' && this.items[i].name !== 'Aged Brie') {
-                this.updateQualityNormalItems(i)
+            switch (item.name) {
+                case "Aged Brie":
+                    item.updateQualityAgedBrie()
+                    break
+                case "Backstage passes to a TAFKAL80ETC concert":
+                    item.updateQualityBackstage()
+                    break
+                case "Sulfuras, Hand of Ragnaros":
+                    break
+                case "Conjured Mana Cake":
+                    item.conjuredManaCakeCheck()
+                    break
+                default:
+                    item.updateQualityNormalItems()
+                    break
             }
         }
-        return this.items;
+        return this.items
     }
 }
+
 
 
 
