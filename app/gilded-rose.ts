@@ -64,7 +64,7 @@ export class GildedRose {
         this.items[i].sellIn = this.items[i].sellIn
     }
 
-    //the main functions
+    //the main function
     updateQuality() {
         for (let i = 0; i < this.items.length; i++) {
             if (this.items[i].name === 'Aged Brie') {
